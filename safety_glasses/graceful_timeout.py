@@ -14,19 +14,35 @@ def timeout_handler(signum, frame):
     raise OSError(f'Timeout in {frame}!')
 
 
-@contextmanager
-def graceful_timeout(timeout=10):
+class graceful_timeout():
     """
     Set OS ALARM to happen after timeout
+    Usage:
+    with graceful_timeout(timeout=5) as watched:
+        if not watched:
+            print('Did not set timeout')
+        do_things()
     """
-    try:
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(timeout)
-        yield True
-    except Exception:
-        yield False
-    finally:
+
+    _timeout = 60
+    _setup = False
+
+    def __init__(self, timeout):
+        if timeout:
+            self._timeout = timeout
+
+    def __enter__(self):
         try:
-            signal.alarm(0)
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(self._timeout)
+            self._setup = True
+            return True
+        except Exception:
+            return False
+
+    def __exit__(self, *args, **kwargs):
+        try:
+            if self._setup:
+                signal.alarm(0)
         except Exception:
             pass

@@ -29,7 +29,7 @@ def safety_debug_global_state():
     return 'safety_glasses', [
         ("SIGUSR1", repr(signal.getsignal(signal.SIGUSR1))
          if hasattr(signal, 'SIGUSR1') else 'n/a'),
-        ("SIGUSR2", repr(signal.getsignal(signal.SIGUSR1))
+        ("SIGUSR2", repr(signal.getsignal(signal.SIGUSR2))
          if hasattr(signal, 'SIGUSR2') else 'n/a'),
         ("SIGALRM", repr(signal.getsignal(signal.SIGALRM))
          if hasattr(signal, 'SIGALRM') else 'n/a'),

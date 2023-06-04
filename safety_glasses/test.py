@@ -14,11 +14,10 @@ def main():
 
     setup_global_state_output()
 
-    # output_global_state(tomler, stream=sys.stdout)
-    output_global_state(dotter, stream=sys.stdout)
-
     with graceful_timeout(10) as is_handled:
         print(f'{is_handled=}')
+        # output_global_state(tomler, stream=sys.stdout)
+        output_global_state(dotter, stream=sys.stdout)
         time.sleep(1)
 
     print('OK up to here, now break:')
@@ -28,7 +27,7 @@ def main():
             print(f'{is_handled=}')
             time.sleep(600)
     except OSError as e:
-        print('YES, GOT ' + e)
+        print('YES, GOT ' + str(e))
     else:
         print('SHOULD NOT GET HERE')
 
