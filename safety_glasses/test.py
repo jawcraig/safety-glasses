@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+import sys
+import time
+from safety_glasses import output_global_state, tomler, dotter, setup_global_state_output, graceful_timeout
+
+
+def main():
+    """
+    Example usage:
+    """
+    output_global_state(tomler, stream=sys.stdout)
+    # output_global_state(dotter, stream=sys.stdout)
+
+    setup_global_state_output()
+
+    # output_global_state(tomler, stream=sys.stdout)
+    output_global_state(dotter, stream=sys.stdout)
+
+    with graceful_timeout(10) as is_handled:
+        print(f'{is_handled=}')
+        time.sleep(1)
+
+    print('OK up to here, now break:')
+
+    try:
+        with graceful_timeout(30) as is_handled:
+            print(f'{is_handled=}')
+            time.sleep(600)
+    except OSError as e:
+        print('YES, GOT ' + e)
+    else:
+        print('SHOULD NOT GET HERE')
+
+
+
+if __name__ == '__main__':
+    main()
